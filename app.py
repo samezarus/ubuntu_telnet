@@ -1,20 +1,57 @@
 import telnetlib
+import time
+import datetime
+import os
 
-port     = 23
-HOST     = "192.168.2.254"
-user     = "admin"
-password = "xxx"
+# --------------------------------------------------------------------------------------------
+def testLogFolder(log_folder):
+	if (not os.path.exists(log_folder)):
+		os.makedirs(log_folder)
 
-tn = telnetlib.Telnet(HOST)
+def createDayFolder(log_folder):
+	day_folder = log_folder+str(datetime.datetime.now().date())
+	if (not os.path.exists(day_folder)):
+		os.makedirs(day_folder)
+	return day_folder
 
-tn.read_until("Login: ")
-tn.write(user + "\n")
-if password:
-	tn.read_until("Password: ")
-	tn.write(password + "\n")
+# --------------------------------------------------------------------------------------------
 
-tn.write("ls\n")
-tn.write("exit\n")
+port     = 2300
+host     = "172.16.17.2"
+user     = "smdr"
+password = "pccsmdr"
 
-print tn.read_all()
+log_folder = "/var/log/ats_loger/"
+
+telnet = telnetlib.Telnet()
+telnet.open(host, port)
+
+telnet.read_until("-".encode('ascii'))
+telnet.write(user.encode('ascii') + b"\r")
+
+telnet.read_until("Enter Password:".encode('ascii'))
+telnet.write(password.encode('ascii') + b"\r")
+
+day_folder_path = createDayFolder(log_folder) +"/log.txt"
+
+while True:
+	time.sleep(1)
+
+	s = str(telnet.read_very_eager())
+	if (s != "" and s != "b''"):
+		day_folder = open(day_folder_path, "+a")
+		day_folder.write(s)
+		day_folder.close()
+		print(s)
+	s = ""
+
+
+
+
+
+
+
+
+
+
 
