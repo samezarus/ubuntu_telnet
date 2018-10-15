@@ -1,0 +1,32 @@
+# copy to /etc/systemd/system/
+#
+# systemctl enable atsloger.service
+# systemctl daemon-reload
+# service atsloger start
+#
+
+[Unit]
+
+Description=Ats loger
+
+After=syslog.target
+
+[Service]
+
+Type=simple
+
+User=root
+
+Group=root
+
+WorkingDirectory=/home/sameza/python/git/ubuntu_telnet
+
+ExecStart=/home/sameza/python/git/ubuntu_telnet/app.py
+
+StandardOutput=syslog
+
+StandardError=syslog
+
+[Install]
+
+WantedBy=multi-user.target
