@@ -47,8 +47,8 @@ while True:
 
 	s = str(telnet.read_very_eager())
 	if (s != '' and s != "b''"):
-		day_folder = open(day_file_name, '+a')
-		day_folder.write(s)
-		day_folder.close()
+		day_file = open(day_file_name, '+a')
+		day_file.write(s)
+		day_file.close()
 		#print(s)
 	s = ''
